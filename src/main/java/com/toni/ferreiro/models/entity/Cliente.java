@@ -1,13 +1,18 @@
 package com.toni.ferreiro.models.entity;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
@@ -40,8 +45,14 @@ public class Cliente implements Serializable{
 	@DateTimeFormat(pattern="yyyy-mm-dd")
 	private Date createAt;
 	
-	private String foto;
+	@OneToMany(mappedBy = "cliente", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	private List<Factura> facturas;
 	
+	private String foto;
+		
+	public Cliente() {
+		facturas = new  ArrayList<Factura>();
+	}
 	public Long getId() {
 		return id;
 	}
@@ -77,6 +88,15 @@ public class Cliente implements Serializable{
 	}
 	public void setFoto(String foto) {
 		this.foto = foto;
+	}
+	public List<Factura> getFacturas() {
+		return facturas;
+	}
+	public void setFacturas(List<Factura> facturas) {
+		this.facturas = facturas;
+	}
+	public void addFacturas(Factura factura) {
+		facturas.add(factura);
 	}
 	
 }

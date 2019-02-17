@@ -21,3 +21,12 @@ INSERT INTO cliente (id,nombre,apellido,email,create_at,foto) VALUES (19,'Chus',
 INSERT INTO cliente (id,nombre,apellido,email,create_at,foto) VALUES (20,'Paz','Rodriguez Perez','email20@email.com','2018-06-01','');
 INSERT INTO cliente (id,nombre,apellido,email,create_at,foto) VALUES (21,'Bea','Gonzalez Lopez','email21@email.com','2018-02-20','');
 INSERT INTO cliente (id,nombre,apellido,email,create_at,foto) VALUES (22,'Susana','Rodriguez Perez','email22@email.com','2018-06-01','');
+
+
+INSERT INTO producto (id, nombre, precio, create_at) VALUES (1,'television','3000','2018-06-01');
+INSERT INTO producto (id, nombre, precio, create_at) VALUES (1,'cafetera','250','2018-08-01');
+INSERT INTO producto (id, nombre, precio, create_at) VALUES (1,'licuadora','100','2018-10-11');
+INSERT INTO producto (id, nombre, precio, create_at) VALUES (1,'radio','30','2018-07-09');
+INSERT INTO producto (id, nombre, precio, create_at) VALUES (1,'ordenador','800','2018-05-13');
+INSERT INTO producto (id, nombre, precio, create_at) VALUES (1,'secador','300','2018-04-15');
+INSERT INTO producto (id, nombre, precio, create_at) VALUES (1,'batidora','50','2018-02-20');
