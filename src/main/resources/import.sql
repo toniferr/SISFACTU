@@ -23,18 +23,18 @@ INSERT INTO cliente (id,nombre,apellido,email,create_at,foto) VALUES (21,'Bea','
 INSERT INTO cliente (id,nombre,apellido,email,create_at,foto) VALUES (22,'Susana','Rodriguez Perez','email22@email.com','2018-06-01','');
 
 
-INSERT INTO producto (id, nombre, precio, create_at) VALUES (1,'television','3000','2018-06-01');
-INSERT INTO producto (id, nombre, precio, create_at) VALUES (2,'cafetera','250','2018-08-01');
-INSERT INTO producto (id, nombre, precio, create_at) VALUES (3,'licuadora','100','2018-10-11');
-INSERT INTO producto (id, nombre, precio, create_at) VALUES (4,'radio','30','2018-07-09');
-INSERT INTO producto (id, nombre, precio, create_at) VALUES (5,'ordenador','800','2018-05-13');
-INSERT INTO producto (id, nombre, precio, create_at) VALUES (6,'secador','300','2018-04-15');
-INSERT INTO producto (id, nombre, precio, create_at) VALUES (7,'batidora','50','2018-02-20');
+INSERT INTO productos (id, nombre, precio, create_at) VALUES (1,'television',3000,'2018-06-01');
+INSERT INTO productos (id, nombre, precio, create_at) VALUES (2,'cafetera',250,'2018-08-01');
+INSERT INTO productos (id, nombre, precio, create_at) VALUES (3,'licuadora',100,'2018-10-11');
+INSERT INTO productos (id, nombre, precio, create_at) VALUES (4,'radio',30,'2018-07-09');
+INSERT INTO productos (id, nombre, precio, create_at) VALUES (5,'ordenador',800,'2018-05-13');
+INSERT INTO productos (id, nombre, precio, create_at) VALUES (6,'secador',300,'2018-04-15');
+INSERT INTO productos (id, nombre, precio, create_at) VALUES (7,'batidora',50,'2018-02-20');
 
-INSERT INTO factura (id, descripcion, observacion, cliente_id, create_id) VALUES (1,'Factura informatica de Toni',null,1,'2018-02-20');
-INSERT INTO facturas_items (id, cantidad, factura_id, producto_id) VAlUES (1,1,1,1);
-INSERT INTO facturas_items (id, cantidad, factura_id, producto_id) VAlUES (2,2,1,4);
-INSERT INTO facturas_items (id, cantidad, factura_id, producto_id) VAlUES (3,4,1,5);
+INSERT INTO facturas (id, descripcion, observacion, cliente_id, create_at) VALUES (1,'Factura informatica de Toni',null,1,'2018-02-20');
+INSERT INTO factura_items (id, cantidad, factura_id, producto_id) VAlUES (1,1,1,1);
+INSERT INTO factura_items (id, cantidad, factura_id, producto_id) VAlUES (2,2,1,4);
+INSERT INTO factura_items (id, cantidad, factura_id, producto_id) VAlUES (3,4,1,5);
 
-INSERT INTO factura (id, descripcion, observacion, cliente_id, create_id) VALUES (2,'Factura de casa de Toni',null,1,'2018-02-20');
-INSERT INTO facturas_items (id, cantidad, factura_id, producto_id) VAlUES (1,2,2,2);
+INSERT INTO facturas (id, descripcion, observacion, cliente_id, create_at) VALUES (2,'Factura de casa de Toni',null,1,'2018-02-20');
+INSERT INTO factura_items (id, cantidad, factura_id, producto_id) VALUES (4,2,2,2);

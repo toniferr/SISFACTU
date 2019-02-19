@@ -26,12 +26,12 @@
 				<table th:if="${not #lists.isEmpty(cliente.facturas)}"
 					class="table table-bordered table-spriped my-4">
 					<th:head class="thead-inversed">
-						<th>
+						<tr>
 						<td>Folio</td>
-						<td>Descripción</td>
+						<td>Descripcion</td>
 						<td>Fecha</td>
 						<td>Total</td>
-						</th>
+						</tr>
 					</th:head>
 					<tr th:each="factura : ${cliente.facturas}">
 						<td th:text="${factura.id}"></td>
