@@ -24,17 +24,22 @@
 							<th>apellido</th>
 							<th>email</th>
 							<th>fecha</th>
+							<th>crear factura</th>
 							<th>editar</th>
 							<th>eliminar</th>
 						</tr>
 					</thead>
 					<tbody>
 						<tr th:each="cliente: ${clientes}">
-							<td> <a class="btn btn-primary btn-xs" th:href="@{/ver/} + ${cliente.id}" th:text="${cliente.id}"></a></td>
+							<td><a class="btn btn-primary btn-xs"
+								th:href="@{/ver/} + ${cliente.id}" th:text="${cliente.id}"></a></td>
 							<td th:text="${cliente.nombre}"></td>
 							<td th:text="${cliente.apellido}"></td>
 							<td th:text="${cliente.email}"></td>
 							<td th:text="${cliente.createAt}"></td>
+							<td><a class="btn btn-success btn-xs"
+								th:href="@{'/factura/form/' + ${cliente.id}}"
+								th:text="'crear factura'"></a></td>
 							<td><a class="btn btn-primary btn-xs"
 								th:href="@{/form/} + ${cliente.id}" th:text="'editar'" /></td>
 							<td><a class="btn btn-danger btn-xs"
@@ -43,7 +48,7 @@
 						</tr>
 					</tbody>
 				</table>
-				
+
 				<nav th:replace="paginator-nav :: paginator"></nav>
 			</div>
 		</div>
