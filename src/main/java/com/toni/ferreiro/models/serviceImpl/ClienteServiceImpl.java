@@ -9,7 +9,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.toni.ferreiro.models.daoInterface.ClienteDaoInterface;
+import com.toni.ferreiro.models.daoInterface.ProductoDaoInterface;
 import com.toni.ferreiro.models.entity.Cliente;
+import com.toni.ferreiro.models.entity.Producto;
 import com.toni.ferreiro.models.serviceInterface.ClienteServiceInterface;
 
 @Service
@@ -17,6 +19,9 @@ public class ClienteServiceImpl implements ClienteServiceInterface {
 
 	@Autowired
 	private ClienteDaoInterface clienteDao;
+	
+	@Autowired
+	private ProductoDaoInterface productoDao;
 	
 	@Override
 	@Transactional(readOnly = true)
@@ -46,6 +51,11 @@ public class ClienteServiceImpl implements ClienteServiceInterface {
 	@Override
 	public Page<Cliente> findAll(Pageable pageable) {
 		return clienteDao.findAll(pageable);
+	}
+
+	@Override
+	public List<Producto> findByNombre(String term) {
+		return productoDao.findByNombre(term);
 	}
 
 }
