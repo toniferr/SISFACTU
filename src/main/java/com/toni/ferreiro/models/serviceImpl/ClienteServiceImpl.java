@@ -72,8 +72,16 @@ public class ClienteServiceImpl implements ClienteServiceInterface {
 	}
 
 	@Override
+	@Transactional (readOnly = true)
 	public Producto findProductoById(Long id) {
-		return productoDao.findOne(id); //spring 5 cambia findById
+		return productoDao.findOne(id); //spring 5 cambia a findById
 	}
 
+	@Override
+	@Transactional (readOnly = true)
+	public Factura findFacturaById(Long id) {
+		return facturaDao.findOne(id);
+	}
+
+	
 }
