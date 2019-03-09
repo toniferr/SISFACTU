@@ -65,9 +65,9 @@ public class ClienteController {
 	@GetMapping(value = "/ver/{id}")
 	public String ver(@PathVariable(value = "id") Long id, Map<String, Object> model, RedirectAttributes flash) {
 
-		Cliente cliente = clienteService.findOne(id);
+		Cliente cliente = clienteService.fetchByIdWithFacturas(id);//clienteService.findOne(id);
 		if (cliente == null) {
-			flash.addFlashAttribute("error", "El cliente no existe en la base de datos");
+			flash.addFlashAttribute("danger", "El cliente no existe en la base de datos");
 			return "redirect:/listar";
 		}
 		model.put("cliente", cliente);
@@ -104,11 +104,11 @@ public class ClienteController {
 		if (id > 0) {
 			cliente = clienteService.findOne(id);
 			if (cliente == null) {
-				flash.addFlashAttribute("error", "No existe el cliente");
+				flash.addFlashAttribute("danger", "No existe el cliente");
 				return "redirect:/listar";
 			}
 		} else {
-			flash.addFlashAttribute("error", "No existe el cliente");
+			flash.addFlashAttribute("danger", "No existe el cliente");
 			return "redirect:/listar";
 		}
 		model.put("cliente", cliente);
@@ -139,7 +139,7 @@ public class ClienteController {
 
 				cliente.setFoto(uniqueFilename);
 			} catch (IOException e) {
-				flash.addFlashAttribute("error", "No se ha subido correctamente " + foto.getName());
+				flash.addFlashAttribute("danger", "No se ha subido correctamente " + foto.getName());
 			}
 
 		}
