@@ -39,6 +39,7 @@
 							<th>Fecha</th>
 							<th>Total</th>
 							<th>Ver</th>
+							<th>Eliminar</th>
 						</tr>
 					</th:head>
 					<tr th:each="factura : ${cliente.facturas}">
@@ -46,7 +47,12 @@
 						<td th:text="${factura.descripcion}"></td>
 						<td th:text="${factura.createAt}"></td>
 						<td th:text="${factura.total}"></td>
-						<td> <a class="btn btn-primary btn-xs" th:href="@{'/factura/ver/' + ${factura.id}}" th:text="'Detalle'"></a></td>
+						<td><a class="btn btn-primary btn-xs"
+							th:href="@{'/factura/ver/' + ${factura.id}}" th:text="'Detalle'"></a></td>
+						<td><a class="btn btn-danger btn-xs"
+							th:href="@{'/factura/eliminar/' + ${factura.id}}"
+							th:text="'Eliminar'"
+							onClick="return confirm('Segro que desea eliminar la factura?')"></a></td>
 					</tr>
 				</table>
 

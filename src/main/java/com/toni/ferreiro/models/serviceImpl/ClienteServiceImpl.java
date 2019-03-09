@@ -83,5 +83,12 @@ public class ClienteServiceImpl implements ClienteServiceInterface {
 		return facturaDao.findOne(id);
 	}
 
+	@Override
+	@Transactional
+	public void deleteFactura(Long id) {
+		facturaDao.delete(id);  //facturaDao.deleteById(id) con spring boot 2
+		
+	}
+
 	
 }
