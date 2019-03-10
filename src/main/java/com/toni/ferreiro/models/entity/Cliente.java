@@ -17,8 +17,10 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 
-import org.hibernate.validator.constraints.Email;
-import org.hibernate.validator.constraints.NotEmpty;
+//import org.hibernate.validator.constraints.Email;  no se usa en spring boot 2
+//import org.hibernate.validator.constraints.NotEmpty; no se usa en spring boot 2
+import javax.validation.constraints.Email; 
+import javax.validation.constraints.NotEmpty;
 import org.springframework.format.annotation.DateTimeFormat;
 
 @Entity

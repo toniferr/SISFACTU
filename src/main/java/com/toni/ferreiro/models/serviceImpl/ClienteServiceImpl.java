@@ -44,7 +44,8 @@ public class ClienteServiceImpl implements ClienteServiceInterface {
 	@Override
 	@Transactional(readOnly = true)
 	public Cliente findOne(Long id) {
-		return clienteDao.findOne(id);
+		return clienteDao.findById(id).orElse(null);
+//		return clienteDao.findOne(id); no se usa findOne en spring boot 2
 	}
 	
 	@Override
@@ -56,7 +57,8 @@ public class ClienteServiceImpl implements ClienteServiceInterface {
 	@Override
 	@Transactional
 	public void delete(Long id) {
-		clienteDao.delete(id);;
+		clienteDao.deleteById(id);
+//		clienteDao.delete(id);
 	}
 
 	@Override
@@ -80,19 +82,22 @@ public class ClienteServiceImpl implements ClienteServiceInterface {
 	@Override
 	@Transactional (readOnly = true)
 	public Producto findProductoById(Long id) {
-		return productoDao.findOne(id); //spring 5 cambia a findById
+		return productoDao.findById(id).orElse(null);
+//		return productoDao.findOne(id); spring 5 (spring boot 2) cambia a findById
 	}
 
 	@Override
 	@Transactional (readOnly = true)
 	public Factura findFacturaById(Long id) {
-		return facturaDao.findOne(id);
+		return facturaDao.findById(id).orElse(null);
+//		return facturaDao.findOne(id); no se usa en spring boot 2( spring framewok 5)
 	}
 
 	@Override
 	@Transactional
 	public void deleteFactura(Long id) {
-		facturaDao.delete(id);  //facturaDao.deleteById(id) con spring boot 2
+		facturaDao.deleteById(id);
+//		facturaDao.delete(id);  facturaDao.deleteById(id) con spring boot 2
 		
 	}
 
