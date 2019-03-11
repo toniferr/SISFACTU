@@ -1,5 +1,6 @@
 package com.toni.ferreiro.controllers;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.nio.file.Files;
@@ -45,27 +46,31 @@ public class ClienteController {
 	private ClienteServiceInterface clienteService;
 
 	private final Logger log = LoggerFactory.getLogger(getClass());
+	
+	private final static String UPLOADS_FOLDER = "uploads";
 
-	@GetMapping(value="/upload/{filename:.+}")
-	public ResponseEntity<Resource> verFoto(@PathVariable String filename){
-		Path pathFoto = Paths.get("upload").resolve(filename).toAbsolutePath();
-		log.info("pathFoto: "+pathFoto);
+	@GetMapping(value = "/upload/{filename:.+}")
+	public ResponseEntity<Resource> verFoto(@PathVariable String filename) {
+		Path pathFoto = Paths.get(UPLOADS_FOLDER).resolve(filename).toAbsolutePath();
+		log.info("pathFoto: " + pathFoto);
 		Resource recurso = null;
 		try {
 			recurso = new UrlResource(pathFoto.toUri());
 			if (!recurso.exists() && recurso.isReadable()) {
-				throw new RuntimeException("Error: no se puede cargar la imagen: "+ pathFoto);
+				throw new RuntimeException("Error: no se puede cargar la imagen: " + pathFoto);
 			}
-		}catch (MalformedURLException e){
-			log.error("error :"+e);
+		} catch (MalformedURLException e) {
+			log.error("error :" + e);
 		}
-		return ResponseEntity.ok().header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\""+ recurso.getFilename()+"\"").body(recurso);
+		return ResponseEntity.ok()
+				.header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + recurso.getFilename() + "\"")
+				.body(recurso);
 	}
-	
+
 	@GetMapping(value = "/ver/{id}")
 	public String ver(@PathVariable(value = "id") Long id, Map<String, Object> model, RedirectAttributes flash) {
 
-		Cliente cliente = clienteService.fetchByIdWithFacturas(id);//clienteService.findOne(id);
+		Cliente cliente = clienteService.fetchByIdWithFacturas(id);// clienteService.findOne(id);
 		if (cliente == null) {
 			flash.addFlashAttribute("danger", "El cliente no existe en la base de datos");
 			return "redirect:/listar";
@@ -79,7 +84,7 @@ public class ClienteController {
 	public String listar(@RequestParam(name = "page", defaultValue = "0") int page, Model model) {
 
 //		Pageable pageRequest = new PageRequest(page, 5); PageRequest is deprecated con spring boot 2
-		Pageable pageRequest = PageRequest.of(page, 5); 
+		Pageable pageRequest = PageRequest.of(page, 5);
 		Page<Cliente> clientes = clienteService.findAll(pageRequest);
 
 		PageRender<Cliente> pageRender = new PageRender<>("/listar", clientes);
@@ -127,8 +132,19 @@ public class ClienteController {
 		}
 
 		if (!foto.isEmpty()) {
+
+			if (cliente.getId() != null && cliente.getId() > 0 && cliente.getFoto() != null
+					&& cliente.getFoto().length() > 0) {
+				Path rootPath = Paths.get(UPLOADS_FOLDER).resolve(cliente.getFoto()).toAbsolutePath();
+				File archivo = rootPath.toFile();
+
+				if (archivo.exists() && archivo.canRead()) {
+					archivo.delete();
+				}
+			}
+
 			String uniqueFilename = UUID.randomUUID().toString() + "_" + foto.getOriginalFilename();
-			Path rootPath = Paths.get("upload").resolve(uniqueFilename);
+			Path rootPath = Paths.get(UPLOADS_FOLDER).resolve(uniqueFilename);
 			Path rootAbsolutPath = rootPath.toAbsolutePath();
 
 			log.info("rootPath: " + rootPath);
@@ -157,9 +173,20 @@ public class ClienteController {
 	public String eliminar(@PathVariable(value = "id") Long id, RedirectAttributes flash) {
 
 		if (id > 0) {
+			Cliente cliente = clienteService.findOne(id);
 			clienteService.delete(id);
+			flash.addFlashAttribute("success", "Cliente borrado correctamente");
+			
+			Path rootPath = Paths.get(UPLOADS_FOLDER).resolve(cliente.getFoto()).toAbsolutePath();
+			File archivo = rootPath.toFile();
+
+			if (archivo.exists() && archivo.canRead()) {
+				if (archivo.delete()) {
+					flash.addFlashAttribute("info", "Foto " + cliente.getFoto() + " borrada correctamente");
+				}
+			}
 		}
-		flash.addFlashAttribute("success", "Cliente borrado correctamente");
+
 		return "redirect:/listar";
 	}
 
