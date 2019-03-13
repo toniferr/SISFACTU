@@ -12,14 +12,18 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 public class LoginController {
 
 	@GetMapping("/login")
-	public String login(@RequestParam(value = "error", required = false) String error, Model model, Principal principal,
+	public String login(@RequestParam(value = "error", required = false) String error,
+			@RequestParam(value = "logout", required = false) String logout, Model model, Principal principal,
 			RedirectAttributes flash) {
 		if (principal != null) {
 			flash.addFlashAttribute("info", "La sesión ya está iniciada");
 			return "redirect:/";
 		}
 		if (error != null) {
-			model.addAttribute("danger","Error en el login");
+			model.addAttribute("danger", "Error en el login");
+		}
+		if (logout != null) {
+			model.addAttribute("success", "Sesion cerrada con éxito");
 		}
 		return "login";
 	}
