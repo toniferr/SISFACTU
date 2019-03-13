@@ -18,7 +18,8 @@ public class SpringSegurityConfig extends WebSecurityConfigurerAdapter {
 		http.authorizeRequests().antMatchers("/", "/css/**", "/js/**", "/images/**", "/listar").permitAll()
 				.antMatchers("/ver/**").hasAnyRole("USER").antMatchers("/uploads/**").hasAnyRole("USER")
 				.antMatchers("/form/**").hasAnyRole("ADMIN").antMatchers("/eliminar/**").hasAnyRole("ADMIN")
-				.antMatchers("/factura/**").hasAnyRole("ADMIN").anyRequest().authenticated();
+				.antMatchers("/factura/**").hasAnyRole("ADMIN").anyRequest().authenticated().and().formLogin()
+				.loginPage("/login").permitAll().and().logout().permitAll();
 	}
 
 	@Autowired
@@ -28,7 +29,7 @@ public class SpringSegurityConfig extends WebSecurityConfigurerAdapter {
 		PasswordEncoder encoder = PasswordEncoderFactories.createDelegatingPasswordEncoder();
 		UserBuilder users = User.builder().passwordEncoder(encoder::encode);
 
-		build.inMemoryAuthentication().withUser(users.username("admin").password("1234").roles("ADMIN,USER"))
+		build.inMemoryAuthentication().withUser(users.username("admin").password("1234").roles("ADMIN","USER"))
 				.withUser(users.username("toni").password("1234").roles("USER"));
 	}
 
