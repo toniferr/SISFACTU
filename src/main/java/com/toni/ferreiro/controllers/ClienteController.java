@@ -5,6 +5,7 @@ import java.net.MalformedURLException;
 import java.util.Collection;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 import org.apache.commons.logging.Log;
@@ -16,11 +17,13 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestWrapper;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -51,9 +54,9 @@ public class ClienteController {
 	@Autowired
 	private UploadFileServiceInterface uploadFileService;
 
+	@Secured("ROLE_USER")
 	@GetMapping(value = "/upload/{filename:.+}")
 	public ResponseEntity<Resource> verFoto(@PathVariable String filename) {
-
 		Resource recurso = null;
 		try {
 			recurso = uploadFileService.load(filename);
@@ -66,6 +69,7 @@ public class ClienteController {
 				.body(recurso);
 	}
 
+	@Secured("ROLE_USER")
 	@GetMapping(value = "/ver/{id}")
 	public String ver(@PathVariable(value = "id") Long id, Map<String, Object> model, RedirectAttributes flash) {
 
@@ -81,7 +85,7 @@ public class ClienteController {
 
 	@RequestMapping(value = { "/listar", "/" }, method = RequestMethod.GET)
 	public String listar(@RequestParam(name = "page", defaultValue = "0") int page, Model model,
-			Authentication authentication) {
+			Authentication authentication, HttpServletRequest request) {
 
 		if (authentication != null) {
 			logger.info("Hola usuario autenticado, tu username es :".concat(authentication.getName()));
@@ -100,6 +104,20 @@ public class ClienteController {
 		} else {
 			logger.info("Hola ".concat(auth.getName().concat(" no tienes acceso")));
 		}
+		
+		SecurityContextHolderAwareRequestWrapper securityContext = new SecurityContextHolderAwareRequestWrapper(request, "ROLE_");
+		
+		if (securityContext.isUserInRole("ADMIN")) { //se añade ROLE_ si dejas "" en la instancia de la clase
+			logger.info("Utilizando forma SecurityContextHolderAwareRequestWrapper ".concat(auth.getName().concat(" tienes acceso")));
+		}else {
+			logger.info("Utilizando forma SecurityContextHolderAwareRequestWrapper ".concat(auth.getName().concat(" no tienes acceso")));
+		}
+		
+		if (request.isUserInRole("ROLE_ADMIN")) {
+			logger.info("Utilizando forma HttpServletRequest ".concat(auth.getName().concat(" tienes acceso")));
+		}else {
+			logger.info("Utilizando forma HttpServletRequest ".concat(auth.getName().concat(" no tienes acceso")));
+		}
 
 //		Pageable pageRequest = new PageRequest(page, 5); PageRequest is deprecated con spring boot 2
 		Pageable pageRequest = PageRequest.of(page, 5);
@@ -113,6 +131,7 @@ public class ClienteController {
 		return "listar";
 	}
 
+	@Secured("ROLE_ADMIN")
 	@RequestMapping(value = "/form")
 	public String crear(Map<String, Object> model) {
 		Cliente cliente = new Cliente();
@@ -121,6 +140,7 @@ public class ClienteController {
 		return "form";
 	}
 
+	@Secured("ROLE_ADMIN")
 	@RequestMapping(value = "/form/{id}")
 	public String editar(@PathVariable(value = "id") Long id, Map<String, Object> model, RedirectAttributes flash) {
 		Cliente cliente = null;
@@ -140,6 +160,7 @@ public class ClienteController {
 		return "form";
 	}
 
+	@Secured("ROLE_ADMIN")
 	@RequestMapping(value = "/form", method = RequestMethod.POST)
 	public String guardar(@Valid Cliente cliente, BindingResult result, RedirectAttributes flash, Model model,
 			@RequestParam("file") MultipartFile foto, SessionStatus status) {
@@ -179,6 +200,7 @@ public class ClienteController {
 		return "redirect:listar";
 	}
 
+	@Secured("ROLE_ADMIN")
 	@RequestMapping(value = "/eliminar/{id}")
 	public String eliminar(@PathVariable(value = "id") Long id, RedirectAttributes flash) {
 
