@@ -5,6 +5,7 @@ package com.toni.ferreiro;
 //import org.slf4j.Logger;
 //import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 //import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 //import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
@@ -24,6 +25,10 @@ public class MvcConfig implements WebMvcConfigurer{ //se añade para spring boot
 //		log.info("resorucePath : "+resourcePath);
 //		registry.addResourceHandler("/upload/**").addResourceLocations(resourcePath);
 //	}
+	
+	public void addViewControllers (ViewControllerRegistry registry) {
+		registry.addViewController("/error_403").setViewName("error_403");
+	}
 
 	
 }
