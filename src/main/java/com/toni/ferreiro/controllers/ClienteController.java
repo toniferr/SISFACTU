@@ -18,6 +18,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -54,7 +55,7 @@ public class ClienteController {
 	@Autowired
 	private UploadFileServiceInterface uploadFileService;
 
-	@Secured("ROLE_USER")
+	@Secured({"ROLE_USER","ROLE_ADMIN"}) //se podria dejar un solo rol entre llaves
 	@GetMapping(value = "/upload/{filename:.+}")
 	public ResponseEntity<Resource> verFoto(@PathVariable String filename) {
 		Resource recurso = null;
@@ -69,7 +70,8 @@ public class ClienteController {
 				.body(recurso);
 	}
 
-	@Secured("ROLE_USER")
+//	@Secured("ROLE_USER")
+	@PreAuthorize("hasAnyRole('ROLE_USER','ROLE_ADMIN')") //se podria usar hasAnyRole para varios roles
 	@GetMapping(value = "/ver/{id}")
 	public String ver(@PathVariable(value = "id") Long id, Map<String, Object> model, RedirectAttributes flash) {
 
@@ -140,7 +142,8 @@ public class ClienteController {
 		return "form";
 	}
 
-	@Secured("ROLE_ADMIN")
+//	@Secured("ROLE_ADMIN")
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@RequestMapping(value = "/form/{id}")
 	public String editar(@PathVariable(value = "id") Long id, Map<String, Object> model, RedirectAttributes flash) {
 		Cliente cliente = null;

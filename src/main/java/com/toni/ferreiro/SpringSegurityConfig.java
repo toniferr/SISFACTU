@@ -13,7 +13,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 import com.toni.ferreiro.auth.handler.LoginSuccessHandler;
 
-@EnableGlobalMethodSecurity(securedEnabled=true)
+@EnableGlobalMethodSecurity(securedEnabled=true, prePostEnabled=true)
 @Configuration
 public class SpringSegurityConfig extends WebSecurityConfigurerAdapter {
 	
