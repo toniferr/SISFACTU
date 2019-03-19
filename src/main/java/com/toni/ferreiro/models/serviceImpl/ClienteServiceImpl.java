@@ -70,7 +70,8 @@ public class ClienteServiceImpl implements ClienteServiceInterface {
 	@Override
 	@Transactional (readOnly = true)
 	public List<Producto> findByNombre(String term) {
-		return productoDao.findByNombre(term);
+//		return productoDao.findByNombre(term);
+		return productoDao.findByNombreLikeIgnoreCase("%"+term+"%");
 	}
 
 	@Override
