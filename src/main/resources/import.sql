@@ -38,3 +38,10 @@ INSERT INTO factura_items (id, cantidad, factura_id, producto_id) VAlUES (3,4,1,
 
 INSERT INTO facturas (id, descripcion, observacion, cliente_id, create_at) VALUES (2,'Factura de casa de Toni',null,1,'2018-02-20');
 INSERT INTO factura_items (id, cantidad, factura_id, producto_id) VALUES (4,2,2,2);
+
+INSERT INTO users (username, password, enabled) VALUES ('toni','$2a$10$lUnCInFu0mO79KaiOcct6e88TqKK/aQgfjKwY/x.VbcxkNyoyijrG',1);
+INSERT INTO users (username, password, enabled) VALUES ('admin','$2a$10$.PKvmDPYMn8ukz3UxkTCDOKBQgLxR7EuvqEwl2xP/Gy/pREYTDtji',1);
+
+INSERT INTO authorities (user_id, authority) VALUES (1, 'ROLE_USER');
+INSERT INTO authorities (user_id, authority) VALUES (2, 'ROLE_USER');
+INSERT INTO authorities (user_id, authority) VALUES (2, 'ROLE_ADMIN');

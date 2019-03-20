@@ -1,6 +1,6 @@
 package com.toni.ferreiro;
 
-import javax.sql.DataSource;
+//import javax.sql.DataSource;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
@@ -11,6 +11,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import com.toni.ferreiro.auth.handler.LoginSuccessHandler;
+import com.toni.ferreiro.models.serviceImpl.JpaUserDetailsService;
 
 @EnableGlobalMethodSecurity(securedEnabled=true, prePostEnabled=true)
 @Configuration
@@ -19,11 +20,14 @@ public class SpringSegurityConfig extends WebSecurityConfigurerAdapter {
 	@Autowired
 	private LoginSuccessHandler successHandler;
 	
-	@Autowired 
-	private DataSource datasource;
+//	@Autowired 
+//	private DataSource datasource;
 	
 	@Autowired
 	private BCryptPasswordEncoder passwordEncoder;
+	
+	@Autowired
+	private JpaUserDetailsService userDetailsService;
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
@@ -46,9 +50,13 @@ public class SpringSegurityConfig extends WebSecurityConfigurerAdapter {
 
 		build.inMemoryAuthentication().withUser(users.username("admin").password("1234").roles("ADMIN", "USER"))
 				.withUser(users.username("toni").password("1234").roles("USER"));*/
-		build.jdbcAuthentication().dataSource(datasource).passwordEncoder(passwordEncoder)
+		
+		
+		/*build.jdbcAuthentication().dataSource(datasource).passwordEncoder(passwordEncoder)
 		.usersByUsernameQuery("select username, password, enabled from users where username=?")
-		.authoritiesByUsernameQuery("select u.username, a.authority from authorities a inner join users u on a.user_id=u.id where u.username=?");
+		.authoritiesByUsernameQuery("select u.username, a.authority from authorities a inner join users u on a.user_id=u.id where u.username=?");*/
+		
+		build.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder);
 	}
 
 }
