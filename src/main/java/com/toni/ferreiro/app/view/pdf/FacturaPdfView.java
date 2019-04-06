@@ -22,7 +22,7 @@ import com.lowagie.text.pdf.PdfWriter;
 import com.toni.ferreiro.models.entity.Factura;
 import com.toni.ferreiro.models.entity.ItemFactura;
 
-@Component("factura/ver")
+@Component("factura/ver.pdf")
 public class FacturaPdfView extends AbstractPdfView {
 	
 	@Autowired
