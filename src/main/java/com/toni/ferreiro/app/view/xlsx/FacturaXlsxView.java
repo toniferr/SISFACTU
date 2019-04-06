@@ -13,6 +13,7 @@ import org.apache.poi.ss.usermodel.IndexedColors;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
+import org.springframework.context.support.MessageSourceAccessor;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.view.document.AbstractXlsView;
 
@@ -29,10 +30,14 @@ public class FacturaXlsxView extends AbstractXlsView {
 		response.setHeader("Content-Disposition", "attachment; filename=\"factura_view.xlsx\"");
 		Factura factura = (Factura) model.get("factura");
 		Sheet sheet = workbook.createSheet("Factura Spring");
+		
+		MessageSourceAccessor mensajes = getMessageSourceAccessor();
+		
+		
 		Row row = sheet.createRow(0);
 		Cell cell = row.createCell(0);
 		
-		cell.setCellValue("Datos del cliente");
+		cell.setCellValue(mensajes.getMessage("text.factura.ver.datos.cliente"));
 		row = sheet.createRow(1);
 		cell = row.createCell(0);
 		cell.setCellValue(factura.getCliente().getNombre() + " " + factura.getCliente().getApellido());
@@ -41,10 +46,10 @@ public class FacturaXlsxView extends AbstractXlsView {
 		cell = row.createCell(0);
 		cell.setCellValue(factura.getCliente().getEmail());
 		
-		sheet.createRow(4).createCell(0).setCellValue("Datos de la factura");
-		sheet.createRow(5).createCell(0).setCellValue("Folio: "+factura.getId());
-		sheet.createRow(6).createCell(0).setCellValue("Descripción: "+factura.getDescripcion());
-		sheet.createRow(7).createCell(0).setCellValue("Fecha: "+factura.getCreateAt());
+		sheet.createRow(4).createCell(0).setCellValue(mensajes.getMessage("text.factura.ver.datos.factura"));
+		sheet.createRow(5).createCell(0).setCellValue(mensajes.getMessage("text.cliente.factura.folio")+": " + factura.getId());
+		sheet.createRow(6).createCell(0).setCellValue(mensajes.getMessage("text.cliente.factura.descripcion")+":" + factura.getDescripcion());
+		sheet.createRow(7).createCell(0).setCellValue(mensajes.getMessage("text.cliente.factura.fecha")+": " + factura.getCreateAt());
 		
 		CellStyle theaderStyle = workbook.createCellStyle();
 		theaderStyle.setBorderBottom(BorderStyle.MEDIUM);
@@ -61,10 +66,10 @@ public class FacturaXlsxView extends AbstractXlsView {
 		tbodyStyle.setBorderLeft(BorderStyle.THIN);
 		
 		Row header = sheet.createRow(9);
-		header.createCell(0).setCellValue("Producto");
-		header.createCell(1).setCellValue("Precio");
-		header.createCell(2).setCellValue("Cantidad");
-		header.createCell(3).setCellValue("Total");
+		header.createCell(0).setCellValue(mensajes.getMessage("text.factura.form.item.nombre"));
+		header.createCell(1).setCellValue(mensajes.getMessage("text.factura.form.item.precio"));
+		header.createCell(2).setCellValue(mensajes.getMessage("text.factura.form.item.cantidad"));
+		header.createCell(3).setCellValue(mensajes.getMessage("text.factura.form.item.total"));
 		
 		header.getCell(0).setCellStyle(theaderStyle);
 		header.getCell(1).setCellStyle(theaderStyle);
@@ -94,7 +99,7 @@ public class FacturaXlsxView extends AbstractXlsView {
 		
 		Row filatotal = sheet.createRow(rownum);
 		cell = filatotal.createCell(2);
-		cell.setCellValue("Gran Total: ");	
+		cell.setCellValue(mensajes.getMessage("text.factura.form.total")+" : ");	
 		cell.setCellStyle(tbodyStyle);		
 		
 		cell = filatotal.createCell(3);
