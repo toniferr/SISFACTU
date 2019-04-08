@@ -15,13 +15,13 @@ import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.springframework.context.support.MessageSourceAccessor;
 import org.springframework.stereotype.Component;
-import org.springframework.web.servlet.view.document.AbstractXlsView;
+import org.springframework.web.servlet.view.document.AbstractXlsxView;
 
 import com.toni.ferreiro.models.entity.Factura;
 import com.toni.ferreiro.models.entity.ItemFactura;
 
-@Component("factura/ver")
-public class FacturaXlsxView extends AbstractXlsView {
+@Component("factura/ver.xlsx")
+public class FacturaXlsxView extends AbstractXlsxView {
 
 	@Override
 	protected void buildExcelDocument(Map<String, Object> model, Workbook workbook, HttpServletRequest request,
@@ -92,7 +92,7 @@ public class FacturaXlsxView extends AbstractXlsView {
 			cell.setCellValue(item.getCantidad());
 			cell.setCellStyle(tbodyStyle);
 			
-			cell = fila.createCell(2);
+			cell = fila.createCell(3);
 			cell.setCellValue(item.calcularImporte());	
 			cell.setCellStyle(tbodyStyle);		
 		}
