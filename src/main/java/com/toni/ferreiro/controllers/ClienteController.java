@@ -35,11 +35,13 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.toni.ferreiro.app.view.xml.ClienteList;
 import com.toni.ferreiro.models.entity.Cliente;
 import com.toni.ferreiro.models.serviceInterface.ClienteServiceInterface;
 import com.toni.ferreiro.models.serviceInterface.UploadFileServiceInterface;
@@ -56,11 +58,11 @@ public class ClienteController {
 
 	@Autowired
 	private UploadFileServiceInterface uploadFileService;
-	
+
 	@Autowired
 	private MessageSource messageSource;
 
-	@Secured({"ROLE_USER","ROLE_ADMIN"}) //se podria dejar un solo rol entre llaves
+	@Secured({ "ROLE_USER", "ROLE_ADMIN" }) // se podria dejar un solo rol entre llaves
 	@GetMapping(value = "/upload/{filename:.+}")
 	public ResponseEntity<Resource> verFoto(@PathVariable String filename) {
 		Resource recurso = null;
@@ -76,7 +78,7 @@ public class ClienteController {
 	}
 
 //	@Secured("ROLE_USER")
-	@PreAuthorize("hasAnyRole('ROLE_USER','ROLE_ADMIN')") //se podria usar hasAnyRole para varios roles
+	@PreAuthorize("hasAnyRole('ROLE_USER','ROLE_ADMIN')") // se podria usar hasAnyRole para varios roles
 	@GetMapping(value = "/ver/{id}")
 	public String ver(@PathVariable(value = "id") Long id, Map<String, Object> model, RedirectAttributes flash) {
 
@@ -88,6 +90,14 @@ public class ClienteController {
 		model.put("cliente", cliente);
 		model.put("titulo", "Detalle cliente: " + cliente.getNombre());
 		return "ver";
+	}
+
+	@GetMapping(value = "/listar-rest")
+	public @ResponseBody ClienteList listarRest() { // en el caso que queramos pasar el json a xml, necesitamos el
+													// wraper
+//	public @ResponseBody List<Cliente> listarRest() {
+		// return clienteService.findAll();
+		return new ClienteList(clienteService.findAll());
 	}
 
 	@RequestMapping(value = { "/listar", "/" }, method = RequestMethod.GET)
@@ -111,18 +121,21 @@ public class ClienteController {
 		} else {
 			logger.info("Hola ".concat(auth.getName().concat(" no tienes acceso")));
 		}
-		
-		SecurityContextHolderAwareRequestWrapper securityContext = new SecurityContextHolderAwareRequestWrapper(request, "ROLE_");
-		
-		if (securityContext.isUserInRole("ADMIN")) { //se añade ROLE_ si dejas "" en la instancia de la clase
-			logger.info("Utilizando forma SecurityContextHolderAwareRequestWrapper ".concat(auth.getName().concat(" tienes acceso")));
-		}else {
-			logger.info("Utilizando forma SecurityContextHolderAwareRequestWrapper ".concat(auth.getName().concat(" no tienes acceso")));
+
+		SecurityContextHolderAwareRequestWrapper securityContext = new SecurityContextHolderAwareRequestWrapper(request,
+				"ROLE_");
+
+		if (securityContext.isUserInRole("ADMIN")) { // se añade ROLE_ si dejas "" en la instancia de la clase
+			logger.info("Utilizando forma SecurityContextHolderAwareRequestWrapper "
+					.concat(auth.getName().concat(" tienes acceso")));
+		} else {
+			logger.info("Utilizando forma SecurityContextHolderAwareRequestWrapper "
+					.concat(auth.getName().concat(" no tienes acceso")));
 		}
-		
+
 		if (request.isUserInRole("ROLE_ADMIN")) {
 			logger.info("Utilizando forma HttpServletRequest ".concat(auth.getName().concat(" tienes acceso")));
-		}else {
+		} else {
 			logger.info("Utilizando forma HttpServletRequest ".concat(auth.getName().concat(" no tienes acceso")));
 		}
 
@@ -133,7 +146,7 @@ public class ClienteController {
 		PageRender<Cliente> pageRender = new PageRender<>("/listar", clientes);
 
 //		model.addAttribute("titulo", "Listado de clientes");
-		model.addAttribute("titulo", messageSource.getMessage("text.cliente.listar.titulo",null, locale));
+		model.addAttribute("titulo", messageSource.getMessage("text.cliente.listar.titulo", null, locale));
 		model.addAttribute("clientes", clientes);
 		model.addAttribute("page", pageRender);
 		return "listar";
@@ -237,13 +250,12 @@ public class ClienteController {
 			return false;
 		}
 		Collection<? extends GrantedAuthority> authorities = auth.getAuthorities();
-		/*for (GrantedAuthority authority : authorities) {
-			if (role.equals(authority.getAuthority())) {
-				logger.info("Hola ".concat(auth.getName().concat(" ,tu rol es ").concat(authority.getAuthority())));
-				return true;
-			}
-		}
-		return false;*/
+		/*
+		 * for (GrantedAuthority authority : authorities) { if
+		 * (role.equals(authority.getAuthority())) {
+		 * logger.info("Hola ".concat(auth.getName().concat(" ,tu rol es ").concat(
+		 * authority.getAuthority()))); return true; } } return false;
+		 */
 		return authorities.contains(new SimpleGrantedAuthority(role));
 	}
 

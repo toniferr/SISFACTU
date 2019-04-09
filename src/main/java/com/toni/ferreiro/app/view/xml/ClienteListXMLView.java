@@ -34,6 +34,7 @@ public class ClienteListXMLView extends MarshallingView{
 		model.remove("clientes");
 		
 		model.put("clienteList", new ClienteList(clientes.getContent())); //devuelve listado paginado(no todos)
+		//necesita pasarle ClienteList(un wraper)
 
 		super.renderMergedOutputModel(model, request, response);
 	}
