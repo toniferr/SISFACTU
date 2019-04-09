@@ -15,13 +15,16 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import javax.validation.constraints.NotNull;
-
 //import org.hibernate.validator.constraints.Email;  no se usa en spring boot 2
 //import org.hibernate.validator.constraints.NotEmpty; no se usa en spring boot 2
-import javax.validation.constraints.Email; 
+import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+
 import org.springframework.format.annotation.DateTimeFormat;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 @Entity
 public class Cliente implements Serializable{
@@ -45,9 +48,12 @@ public class Cliente implements Serializable{
 	@Column(name ="create_at")
 	@Temporal(TemporalType.DATE)
 	@DateTimeFormat(pattern="yyyy-mm-dd")
+	@JsonFormat(pattern="yyy-mm-dd HH:mm:ss")
 	private Date createAt;
 	
 	@OneToMany(mappedBy = "cliente", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	//@JsonIgnore esto ignora la factura directamente y no la muestra en el json
+	@JsonManagedReference //la parte delantera, la que queremos mostrar en json
 	private List<Factura> facturas;
 	
 	private String foto;
